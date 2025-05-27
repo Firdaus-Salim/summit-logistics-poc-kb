@@ -3,755 +3,870 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Airline Schedules</title>
-    <!-- Optional: Link to Font Awesome for icons -->
+    <title>Premier Airline Schedules Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        :root {
+            --primary-color: #0A4D68; /* Deep Blue */
+            --secondary-color: #088395; /* Teal */
+            --accent-color: #FFD700; /* Gold accent */
+            --bg-color: #F0F4F8; /* Lightest Blue-Gray */
+            --card-bg-color: #FFFFFF;
+            --text-color: #334155; /* Slate 700 */
+            --text-light-color: #64748B; /* Slate 500 */
+            --border-color: #E2E8F0; /* Slate 300 */
+            --header-font: 'Roboto', sans-serif;
+            --body-font: 'Open Sans', sans-serif;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.7;
-            color: #4A5568; /* Tailwind Slate 700 */
-            margin: 0;
-            padding: 25px;
-            background-color: #F7FAFC; /* Tailwind Slate 100 */
+            font-family: var(--body-font);
+            line-height: 1.65;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        .container {
-            max-width: 1300px;
-            margin: auto;
-            background-color: #FFFFFF;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08), 0 5px 10px rgba(0,0,0,0.04);
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
         }
-        h1 {
-            font-weight: 700;
-            color: #2C5282; /* Tailwind Indigo 800 */
+
+        .dashboard-header {
             text-align: center;
-            border-bottom: 3px solid #4A90E2; /* Tailwind Indigo 500 */
-            padding-bottom: 15px;
-            margin-bottom: 40px;
-            font-size: 2.2em;
-        }
-        .airline-section {
             margin-bottom: 50px;
-            padding: 25px;
-            border: 1px solid #E2E8F0; /* Tailwind Slate 300 */
-            border-radius: 10px;
-            background-color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            transition: box-shadow 0.3s ease-in-out;
         }
-        .airline-section:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-        .airline-header {
+
+        .dashboard-header h1 {
+            font-family: var(--header-font);
+            font-weight: 700;
+            font-size: 2.8em;
+            color: var(--primary-color);
+            letter-spacing: -1px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #CBD5E0; /* Tailwind Slate 400 */
-            padding-bottom: 15px;
+            justify-content: center;
         }
-        .airline-header-icon { /* Specific for airline logo/icon placeholder */
-            font-size: 1.8em; /* Adjusted size */
-            color: #4A90E2; /* Tailwind Indigo 500 */
-            margin-right: 15px;
-            width: 40px; /* Fixed width for alignment */
-            text-align: center;
-        }
-        .airline-header h2 {
-            color: #2D3748; /* Tailwind Slate 800 */
-            font-size: 1.6em;
-            font-weight: 600;
-            margin: 0;
-            border-bottom: none; 
-            padding-bottom: 0;
-        }
-        h3 { /* For list-based schedules subtitles */
-            color: #3182CE; /* Tailwind Blue 600 */
-            margin-top: 25px;
-            margin-bottom: 12px;
+        .dashboard-header h1 .icon { font-size: 0.9em; margin-right: 15px; }
+
+        .dashboard-header .subtitle {
             font-size: 1.1em;
-            font-weight: 600;
-            padding-left: 5px; /* Indent to align with list items */
+            color: var(--text-light-color);
+            font-weight: 300;
         }
-        .table-responsive-wrapper { 
+
+        .airline-card {
+            background-color: var(--card-bg-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 40px;
+            overflow: hidden; /* Important for child border-radius */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .airline-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .airline-card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: #FFF;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .airline-card-header .icon {
+            font-size: 2em;
+            margin-right: 15px;
+            opacity: 0.8;
+        }
+        .airline-card-header h2 {
+            font-family: var(--header-font);
+            font-weight: 500;
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .airline-card-sub-notes {
+            font-size: 0.85em;
+            color: var(--text-light-color);
+            padding: 15px 25px;
+            background-color: #F9FAFB; /* Slate 50 */
+            border-bottom: 1px solid var(--border-color);
+        }
+        .airline-card-sub-notes .icon { margin-right: 5px; }
+
+        .airline-card-body {
+            padding: 25px;
+        }
+        
+        .table-wrapper {
             overflow-x: auto; /* Makes table scrollable on small screens */
             margin-bottom: 20px;
         }
-        table {
+
+        table.schedule-table {
             width: 100%;
-            border-collapse: separate; 
-            border-spacing: 0; 
-            margin-bottom: 0; /* Removed bottom margin from table itself */
-            font-size: 0.95em;
-            border: 1px solid #E2E8F0; 
-            border-radius: 8px; 
-            overflow: hidden; 
+            border-collapse: collapse; /* Changed back for th/td borders */
+            font-size: 0.9em;
+             border-radius: 8px; 
+             overflow: hidden; /* For outer border radius with inner borders */
         }
-        th, td {
-            border-bottom: 1px solid #E2E8F0; 
+        .schedule-table th, .schedule-table td {
             padding: 12px 15px;
             text-align: left;
-            vertical-align: middle; 
+            border: 1px solid var(--border-color); /* Restore individual cell borders */
+            white-space: nowrap; 
         }
-        th {
-            background-color: #EDF2F7; 
-            font-weight: 600;
-            color: #2D3748; 
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 0.05em;
-        }
-        /* Remove side borders for cleaner look */
-        td:first-child, th:first-child { border-left: none; }
-        td:last-child, th:last-child { border-right: none; }
-        /* Apply border radius to corners */
-        thead tr:first-child th:first-child { border-top-left-radius: 8px; }
-        thead tr:first-child th:last-child { border-top-right-radius: 8px; }
-        tbody tr:last-child td:first-child { border-bottom-left-radius: 8px; }
-        tbody tr:last-child td:last-child { border-bottom-right-radius: 8px; }
-        tbody tr:last-child td { border-bottom: none; } /* Remove bottom border from last row cells */
 
-        tbody tr:nth-child(even) {
-            background-color: #F7FAFC; 
-        }
-        tbody tr:hover {
-            background-color: #EBF4FF; 
-        }
-        .notes, .sub-notes {
-            font-size: 0.9em;
-            color: #718096; 
-            margin-top: 8px;
-            margin-bottom: 25px;
-            padding: 10px 15px;
+        /* Remove outer borders if individual cell borders are used, to rely on table's border-radius and overflow:hidden */
+         .schedule-table th:first-child, .schedule-table td:first-child { border-left: none; }
+         .schedule-table th:last-child, .schedule-table td:last-child { border-right: none; }
+         .schedule-table tbody tr:last-child td { border-bottom: none; }
+         .schedule-table thead tr:first-child th { border-top: none; }
+
+
+        .schedule-table th {
             background-color: #F1F5F9; 
-            border-left: 4px solid #63B3ED; 
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.075em;
+        }
+        .schedule-table tbody tr:nth-child(even) {
+            background-color: #F9FAFB; 
+        }
+        .schedule-table tbody tr:hover {
+            background-color: #E0E7FF; 
+        }
+        .days-op-highlight {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #E0E7FF;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #3730A3; 
+            display: inline-block;
+        }
+
+        .remarks-tag {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 3px; /* Add some space if multiple tags */
+        }
+        .remarks-tag .icon { margin-right: 4px; font-size: 0.9em; }
+        .freighter-tag { background-color: #FEE2E2; color: #B91C1C; } 
+        .interline-tag { background-color: #EDE9FE; color: #5B21B6; } 
+        .partner-tag { background-color: #FEF3C7; color: #B45309; }
+
+
+        .list-schedule-group h3 { 
+            font-family: var(--header-font);
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #D1D5DB; 
+            display: flex;
+            align-items: center;
+        }
+        .list-schedule-group h3 .icon { margin-right: 10px; }
+
+        ul.flight-list {
+            list-style: none;
+            padding: 0;
+        }
+        ul.flight-list li {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background-color: #F9FAFB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease-in-out;
+        }
+        ul.flight-list li:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--accent-color);
+        }
+        ul.flight-list .flight-details { flex-grow: 1; }
+        ul.flight-list .flight-aircraft { color: var(--text-light-color); font-size: 0.9em; margin-left: 10px; white-space: nowrap;}
+        ul.flight-list .flight-info { display: flex; flex-direction: column; }
+        ul.flight-list .flight-route-time { font-weight: 500; }
+
+
+        .schedule-footer-notes {
+            font-size: 0.85em;
+            color: var(--text-light-color);
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #EBF8FF; 
             border-radius: 4px;
         }
-        .list-schedule {
-            list-style-type: none;
-            padding-left: 0; /* Align with section */
-        }
-        .list-schedule li {
-            background-color: transparent;
-            margin-bottom: 10px;
-            padding: 12px 15px; /* Consistent padding */
-            border-radius: 6px;
-            border: 1px solid #E2E8F0;
-            transition: background-color 0.2s ease;
-            display: flex; /* For aligning icon and text */
-            align-items: center; /* Vertical alignment for icon and text */
-        }
-        .list-schedule li:hover {
-            background-color: #EBF4FF;
-        }
-        .list-schedule li strong {
-            color: #3182CE; 
-            font-weight: 600;
-            margin-right: 8px; /* Space after strong text */
-        }
-        .list-schedule .icon { /* Icon styling within list items */
-            margin-right: 10px;
-            color: #63B3ED;
-            min-width: 20px; /* Ensure icon space */
-        }
-        .remarks-cell span { 
-            display: block;
-            margin-bottom: 4px;
-        }
-        .freighter-note {
-            font-weight: 600;
-            color: #C53030; /* Tailwind Red 700 */
-        }
-        .interline-note {
-            font-style: italic;
-            color: #6B46C1; /* Tailwind Purple 700 */
-        }
-        .text-muted {
-            color: #A0AEC0; 
-            font-size: 0.85em;
-        }
-        .days-op { font-family: monospace; color: #4A5568; } 
+        .schedule-footer-notes .icon { color: #3182CE; }
 
         /* General Icon styling */
         .icon { margin-right: 8px; }
-        .icon-plane-main { color: #4A90E2;} /* Main title icon */
-        .icon-airline { color: #4A90E2; }
+        .icon-plane-main { color: var(--primary-color);}
+        .icon-airline { color: #FFF; } /* Icons in card headers */
         .icon-info { color: #3182CE; }
         .icon-warning { color: #DD6B20; }
-        .icon-calendar { color: #48BB78; } /* Green */
+        .icon-calendar { color: #48BB78; }
         .icon-freighter-indicator { color: #C53030; }
         .icon-interline-indicator { color: #6B46C1; }
-        .icon-list-route { color: #4299E1; } /* Tailwind Blue 500 */
+        .icon-list-route { color: #4299E1; } 
 
 
+        @media (max-width: 992px) {
+            .airline-card-header h2 { font-size: 1.3em; }
+        }
         @media (max-width: 768px) {
             body { padding: 15px; }
-            .container { padding: 20px; }
-            h1 { font-size: 1.9em; margin-bottom: 30px;}
-            .airline-header-icon { font-size: 1.5em; margin-right: 10px; width: 30px; }
-            .airline-header h2 { font-size: 1.4em; }
-            table, .list-schedule li { font-size: 0.9em; }
-            th, td { padding: 10px 10px; }
+            .dashboard-container { padding: 10px; }
+            .dashboard-header h1 { font-size: 2em; }
+            .dashboard-header .subtitle { font-size: 1em; }
+            .airline-card { padding: 15px; } /* Adjusted from airline-section to airline-card */
+            .airline-card-header { padding: 15px 20px; }
+            .airline-card-header .icon {font-size: 1.5em; margin-right: 10px;}
+            .airline-card-body { padding: 15px; } /* Adjusted padding */
+            .schedule-table th, .schedule-table td { padding: 10px 8px; font-size: 0.85em; }
+            ul.flight-list li { flex-direction: column; align-items: flex-start;}
+            ul.flight-list .flight-aircraft { margin-top: 5px; margin-left:0; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-plane-departure icon icon-plane-main"></i>AIRLINE SCHEDULES</h1>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1><i class="fas fa-plane-departure icon icon-plane-main"></i>Global Airline Schedules</h1>
+            <p class="subtitle">Comprehensive Flight Information from Summit Logistics Partners</p>
+        </header>
 
         <!-- AeroAsia Express -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-paper-plane"></i></span> <!-- Generic plane icon for airlines -->
-                <h2>AeroAsia Express Schedule (AE – 911)</h2>
+        <section class="airline-card" id="ae911">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-rocket"></i></span>
+                <h2>AeroAsia Express (AE – 911)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Passenger & Freighter Network. All times local. Effective 01 Oct 2024.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Route</th>
-                        <th>Flight No</th>
-                        <th>Days of Op.</th>
-                        <th>Freq.</th>
-                        <th>Dep SIN</th>
-                        <th>Arr Dest</th>
-                        <th>Aircraft</th>
-                        <th>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN-BKK</td><td>AE101</td><td class="days-op">Daily</td><td>x7</td><td>22:00</td><td>23:30</td><td>A320</td><td></td></tr>
-                    <tr><td>SIN-HKG</td><td>AE205</td><td class="days-op">1_3_4_5_7</td><td>5x weekly</td><td>01:00</td><td>05:00</td><td>A330</td><td></td></tr>
-                    <tr><td>SIN-AMS</td><td>AE701</td><td class="days-op">_2_4_6_</td><td>3x weekly</td><td>23:50</td><td>07:00+1</td><td>B777F</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter</span></td></tr>
-                    <tr><td>SIN-TPE</td><td>AE211</td><td class="days-op">1_3_5_7</td><td>4x weekly</td><td>10:00</td><td>14:30</td><td>A330</td><td></td></tr>
-                    <tr><td>SIN-FRA</td><td>AE705</td><td class="days-op">__3___7</td><td>2x weekly</td><td>01:00</td><td>08:00</td><td>B747F</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter</span></td></tr>
-                    <tr><td>SIN-LAX</td><td>AE901</td><td class="days-op">_2_4_6_</td><td>3x weekly</td><td>08:00</td><td>08:30</td><td>B777F</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter</span></td></tr>
-                    <tr><td>SIN-KUL</td><td>AE151/153</td><td class="days-op">Daily</td><td>2x Daily</td><td>07:00/17:00</td><td>08:00/18:00</td><td>A320</td><td></td></tr>
-                    <tr><td>SIN-CGK</td><td>AE161</td><td class="days-op">Daily</td><td>x7</td><td>14:00</td><td>15:00</td><td>A320</td><td></td></tr>
-                    <tr><td>SIN-SGN</td><td>AE171</td><td class="days-op">1_2_3_4_5</td><td>5x weekly</td><td>09:00</td><td>10:00</td><td>A321</td><td></td></tr>
-                    <tr><td>SIN-MNL</td><td>AE221</td><td class="days-op">Daily</td><td>x7</td><td>11:00</td><td>14:30</td><td>A321</td><td></td></tr>
-                    <tr><td>SIN-LHR</td><td>AE711</td><td class="days-op">Daily</td><td>x7</td><td>23:30</td><td>06:00+1</td><td>A380</td><td></td></tr>
-                    <tr><td>SIN-CDG</td><td>AE721</td><td class="days-op">1_3_5_7</td><td>4x weekly</td><td>00:30</td><td>07:30+1</td><td>B777</td><td></td></tr>
-                    <tr><td>SIN-SYD</td><td>AE501</td><td class="days-op">1_3_5_7</td><td>4x weekly</td><td>21:00</td><td>07:30+1</td><td>A330</td><td></td></tr>
-                    <tr><td>SIN-MEL</td><td>AE503</td><td class="days-op">_2_4_6_</td><td>3x weekly</td><td>22:30</td><td>08:45+1</td><td>A330</td><td></td></tr>
-                    <tr><td>SIN-NRT</td><td>AE231</td><td class="days-op">_2_4_6_</td><td>3x weekly</td><td>01:00</td><td>09:00</td><td>B777</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Via partner for NRT</span></td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes">
+                <i class="fas fa-info-circle icon icon-info"></i>Passenger & Freighter Network. All times local. Effective 01 Oct 2024.
             </div>
-            <p class="sub-notes"><i class="fas fa-calendar-alt icon icon-calendar"></i>Days of Op: 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun. <i class="fas fa-exclamation-triangle icon icon-warning"></i>Schedule subject to change.</p>
-        </div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>Route</th><th>Flight No</th><th>Days of Op.</th><th>Freq.</th><th>Dep SIN</th><th>Arr Dest</th><th>Aircraft</th><th>Remarks</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SIN-BKK</td><td>AE101</td><td class="days-op-highlight">Daily</td><td>x7</td><td>22:00</td><td>23:30</td><td>A320</td><td></td></tr>
+                            <tr><td>SIN-HKG</td><td>AE205</td><td class="days-op-highlight">1_3_4_5_7</td><td>5x weekly</td><td>01:00</td><td>05:00</td><td>A330</td><td></td></tr>
+                            <tr><td>SIN-AMS</td><td>AE701</td><td class="days-op-highlight">_2_4_6_</td><td>3x weekly</td><td>23:50</td><td>07:00+1</td><td>B777F</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter</span></td></tr>
+                            <tr><td>SIN-TPE</td><td>AE211</td><td class="days-op-highlight">1_3_5_7</td><td>4x weekly</td><td>10:00</td><td>14:30</td><td>A330</td><td></td></tr>
+                            <tr><td>SIN-FRA</td><td>AE705</td><td class="days-op-highlight">__3___7</td><td>2x weekly</td><td>01:00</td><td>08:00</td><td>B747F</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter</span></td></tr>
+                            <tr><td>SIN-LAX</td><td>AE901</td><td class="days-op-highlight">_2_4_6_</td><td>3x weekly</td><td>08:00</td><td>08:30</td><td>B777F</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter</span></td></tr>
+                            <tr><td>SIN-KUL</td><td>AE151/153</td><td class="days-op-highlight">Daily</td><td>2x Daily</td><td>07:00/17:00</td><td>08:00/18:00</td><td>A320</td><td></td></tr>
+                            <tr><td>SIN-CGK</td><td>AE161</td><td class="days-op-highlight">Daily</td><td>x7</td><td>14:00</td><td>15:00</td><td>A320</td><td></td></tr>
+                            <tr><td>SIN-SGN</td><td>AE171</td><td class="days-op-highlight">1_2_3_4_5</td><td>5x weekly</td><td>09:00</td><td>10:00</td><td>A321</td><td></td></tr>
+                            <tr><td>SIN-MNL</td><td>AE221</td><td class="days-op-highlight">Daily</td><td>x7</td><td>11:00</td><td>14:30</td><td>A321</td><td></td></tr>
+                            <tr><td>SIN-LHR</td><td>AE711</td><td class="days-op-highlight">Daily</td><td>x7</td><td>23:30</td><td>06:00+1</td><td>A380</td><td></td></tr>
+                            <tr><td>SIN-CDG</td><td>AE721</td><td class="days-op-highlight">1_3_5_7</td><td>4x weekly</td><td>00:30</td><td>07:30+1</td><td>B777</td><td></td></tr>
+                            <tr><td>SIN-SYD</td><td>AE501</td><td class="days-op-highlight">1_3_5_7</td><td>4x weekly</td><td>21:00</td><td>07:30+1</td><td>A330</td><td></td></tr>
+                            <tr><td>SIN-MEL</td><td>AE503</td><td class="days-op-highlight">_2_4_6_</td><td>3x weekly</td><td>22:30</td><td>08:45+1</td><td>A330</td><td></td></tr>
+                            <tr><td>SIN-NRT</td><td>AE231</td><td class="days-op-highlight">_2_4_6_</td><td>3x weekly</td><td>01:00</td><td>09:00</td><td>B777</td><td><span class="remarks-tag partner-tag"><i class="fas fa-handshake icon"></i>Via partner</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="schedule-footer-notes">
+                    <i class="fas fa-calendar-day icon"></i><strong>Days of Op:</strong> 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun.
+                    <i class="fas fa-exclamation-triangle icon icon-warning" style="margin-left:15px;"></i>Schedule subject to change.
+                </div>
+            </div>
+        </section>
 
         <!-- Pacific Cargo Link -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-link"></i></span>
-                <h2>Pacific Cargo Link - Flight Operations Timetable (PL – 822)</h2>
+        <section class="airline-card" id="pl822">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-anchor"></i></span>
+                <h2>Pacific Cargo Link (PL – 822)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Version 3.2, Effective 15 Sep 2024. All times are local.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Origin</th><th>Destination</th><th>Flight</th><th>Aircraft</th><th>Departs</th><th>Arrives</th><th>Frequency</th><th>Stops</th><th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN</td><td>SYD</td><td>PL550</td><td>A350</td><td>20:45</td><td>07:00+1</td><td class="days-op">Daily</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>LAX</td><td>PL801</td><td>B777F</td><td>10:00</td><td>10:30</td><td class="days-op">Mon, Wed, Fri, Sun</td><td>0</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter</span></td></tr>
-                    <tr><td>SIN</td><td>MEL</td><td>PL552</td><td>B787</td><td>21:30</td><td>07:45+1</td><td class="days-op">Daily</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>ORD</td><td>PL805</td><td>B747F</td><td>11:00</td><td>15:00</td><td class="days-op">Tue, Thu, Sat</td><td>1 (ANC)</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter, Tech Stop Anchorage</span></td></tr>
-                    <tr><td>SIN</td><td>AKL</td><td>PL560</td><td>B777</td><td>22:00</td><td>12:00+1</td><td class="days-op">x5 weekly</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>BNE</td><td>PL554</td><td>A330</td><td>19:00</td><td>05:00+1</td><td class="days-op">Daily</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>SEA</td><td>PL803</td><td>B777F</td><td>09:00</td><td>09:30</td><td class="days-op">Mon, Fri</td><td>0</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter</span></td></tr>
-                    <tr><td>SIN</td><td>JFK</td><td>PL807</td><td>B747F</td><td>11:00</td><td>19:00</td><td class="days-op">Tue, Thu, Sat</td><td>1 (ANC)</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connects via PL805</span></td></tr>
-                    <tr><td>SIN</td><td>BKK</td><td>PL110</td><td>A330</td><td>14:00</td><td>15:30</td><td class="days-op">Daily</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>HKG</td><td>PL210</td><td>A330</td><td>01:30</td><td>05:30</td><td class="days-op">x5 weekly (Ex Tue/Sat)</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>KUL</td><td>PL150</td><td>A320</td><td>09:00</td><td>10:00</td><td class="days-op">2x Daily (0900/1800)</td><td>0</td><td><span class="text-muted">Second flt PL152 @ 1800</span></td></tr>
-                    <tr><td>SIN</td><td>SGN</td><td>PL170</td><td>A321</td><td>16:00</td><td>17:00</td><td class="days-op">Daily</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>MNL</td><td>PL220</td><td>A330</td><td>13:00</td><td>16:30</td><td class="days-op">Daily</td><td>0</td><td></td></tr>
-                    <tr><td>SIN</td><td>GRU</td><td>PL901</td><td>B747F</td><td>10:00</td><td>22:00+1</td><td class="days-op">Wed, Sun</td><td>1 (MIA)</td><td><span class="freighter-note"><i class="fas fa-truck-ramp-box icon icon-freighter-indicator"></i>Freighter</span>, <span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Interline MIA</span></td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes">
+                 <i class="fas fa-info-circle icon"></i>Flight Operations Timetable. Version 3.2, Effective 15 Sep 2024. All times are local.
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>Please check GDS for most up-to-date timings. "+1" indicates next day arrival.</p>
-        </div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>Origin</th><th>Destination</th><th>Flight</th><th>Aircraft</th><th>Departs</th><th>Arrives</th><th>Frequency</th><th>Stops</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SIN</td><td>SYD</td><td>PL550</td><td>A350</td><td>20:45</td><td>07:00+1</td><td class="days-op-highlight">Daily</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>LAX</td><td>PL801</td><td>B777F</td><td>10:00</td><td>10:30</td><td class="days-op-highlight">Mon, Wed, Fri, Sun</td><td>0</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter</span></td></tr>
+                            <tr><td>SIN</td><td>MEL</td><td>PL552</td><td>B787</td><td>21:30</td><td>07:45+1</td><td class="days-op-highlight">Daily</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>ORD</td><td>PL805</td><td>B747F</td><td>11:00</td><td>15:00</td><td class="days-op-highlight">Tue, Thu, Sat</td><td>1 (ANC)</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter, Tech Stop ANC</span></td></tr>
+                            <tr><td>SIN</td><td>AKL</td><td>PL560</td><td>B777</td><td>22:00</td><td>12:00+1</td><td class="days-op-highlight">x5 weekly</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>BNE</td><td>PL554</td><td>A330</td><td>19:00</td><td>05:00+1</td><td class="days-op-highlight">Daily</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>SEA</td><td>PL803</td><td>B777F</td><td>09:00</td><td>09:30</td><td class="days-op-highlight">Mon, Fri</td><td>0</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter</span></td></tr>
+                            <tr><td>SIN</td><td>JFK</td><td>PL807</td><td>B747F</td><td>11:00</td><td>19:00</td><td class="days-op-highlight">Tue, Thu, Sat</td><td>1 (ANC)</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connects via PL805</span></td></tr>
+                            <tr><td>SIN</td><td>BKK</td><td>PL110</td><td>A330</td><td>14:00</td><td>15:30</td><td class="days-op-highlight">Daily</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>HKG</td><td>PL210</td><td>A330</td><td>01:30</td><td>05:30</td><td class="days-op-highlight">x5 weekly (Ex Tue/Sat)</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>KUL</td><td>PL150</td><td>A320</td><td>09:00</td><td>10:00</td><td class="days-op-highlight">2x Daily</td><td>0</td><td><span class="text-muted">(0900/1800), 2nd flt PL152 @ 1800</span></td></tr>
+                            <tr><td>SIN</td><td>SGN</td><td>PL170</td><td>A321</td><td>16:00</td><td>17:00</td><td class="days-op-highlight">Daily</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>MNL</td><td>PL220</td><td>A330</td><td>13:00</td><td>16:30</td><td class="days-op-highlight">Daily</td><td>0</td><td></td></tr>
+                            <tr><td>SIN</td><td>GRU</td><td>PL901</td><td>B747F</td><td>10:00</td><td>22:00+1</td><td class="days-op-highlight">Wed, Sun</td><td>1 (MIA)</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-box-open icon"></i>Freighter</span>, <span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Interline MIA</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="schedule-footer-notes">
+                    <i class="fas fa-info-circle icon"></i>Please check GDS for most up-to-date timings. "+1" indicates next day arrival.
+                </div>
+            </div>
+        </section>
 
         <!-- Equator Freightways -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-globe-africa"></i></span>
-                <h2>Equator Freightways - International Flight Schedule (EQ – 745)</h2>
+        <section class="airline-card" id="eq745">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-globe-africa"></i></span>
+                <h2>Equator Freightways (EQ – 745)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>EQ Cargo Services from Singapore (SIN). Effective 01 Nov 2024.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Route</th><th>Flt No.</th><th>Aircraft</th><th>Frequency</th><th>Departure (SIN)</th><th>Arrival (Local)</th><th>Duration</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN-DXB</td><td>EQ310</td><td>B777</td><td class="days-op">Daily</td><td>02:30</td><td>06:00</td><td>7h 30m</td></tr>
-                    <tr><td>SIN-NBO</td><td>EQ601</td><td>A330F</td><td class="days-op">2x weekly (Wed, Sat)</td><td>09:00</td><td>14:00</td><td>9h 00m</td></tr>
-                    <tr><td>SIN-DOH</td><td>EQ320</td><td>B777</td><td class="days-op">5x weekly</td><td>21:00</td><td>23:50</td><td>6h 50m</td></tr>
-                    <tr><td>SIN-JNB</td><td>EQ611</td><td>A330F</td><td class="days-op">3x weekly (Mon,Thu,Sat)</td><td>10:00</td><td>16:00</td><td>10h 00m</td></tr>
-                    <tr><td>SIN-AUH</td><td>EQ315</td><td>B777</td><td class="days-op">3x weekly (Tue,Fri,Sun)</td><td>15:00</td><td>18:30</td><td>7h 30m</td></tr>
-                    <tr><td>SIN-MCT</td><td>EQ325</td><td>A330F</td><td class="days-op">2x weekly (Mon,Fri)</td><td>01:00</td><td>04:00</td><td>7h 00m</td></tr>
-                    <tr><td>SIN-ADD</td><td>EQ605</td><td>A330F</td><td class="days-op">1x weekly (Fri)</td><td>08:00</td><td>13:00</td><td>9h 00m</td></tr>
-                    <tr><td>SIN-LOS</td><td>EQ621</td><td>A330F</td><td class="days-op">1x weekly (Tue)</td><td>07:00</td><td>14:00</td><td>11h 00m</td></tr>
-                    <tr><td>SIN-LHR</td><td>EQ701</td><td>B777</td><td class="days-op">Daily</td><td>23:45</td><td>06:15+1</td><td>13h 30m</td></tr>
-                    <tr><td>SIN-FRA</td><td>EQ705</td><td>A330F</td><td class="days-op">3x weekly (Mon,Wed,Fri)</td><td>00:30</td><td>07:00+1</td><td>12h 30m</td></tr>
-                    <tr><td>SIN-BKK</td><td>EQ111</td><td>B777</td><td class="days-op">4x weekly (Ex Tue,Thu,Sat)</td><td>18:00</td><td>19:30</td><td>2h 30m</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes">
+                <i class="fas fa-info-circle icon"></i>International Flight Schedule from Singapore (SIN). Effective 01 Nov 2024.
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>All times local. Schedule subject to seasonal adjustments.</p>
-        </div>
-
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>Route</th><th>Flt No.</th><th>Aircraft</th><th>Frequency</th><th>Dep (SIN)</th><th>Arr (Local)</th><th>Duration</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SIN-DXB</td><td>EQ310</td><td>B777</td><td class="days-op-highlight">Daily</td><td>02:30</td><td>06:00</td><td>7h 30m</td></tr>
+                            <tr><td>SIN-NBO</td><td>EQ601</td><td>A330F</td><td class="days-op-highlight">Wed, Sat</td><td>09:00</td><td>14:00</td><td>9h 00m</td></tr>
+                            <tr><td>SIN-DOH</td><td>EQ320</td><td>B777</td><td class="days-op-highlight">5x weekly</td><td>21:00</td><td>23:50</td><td>6h 50m</td></tr>
+                            <tr><td>SIN-JNB</td><td>EQ611</td><td>A330F</td><td class="days-op-highlight">Mon,Thu,Sat</td><td>10:00</td><td>16:00</td><td>10h 00m</td></tr>
+                            <tr><td>SIN-AUH</td><td>EQ315</td><td>B777</td><td class="days-op-highlight">Tue,Fri,Sun</td><td>15:00</td><td>18:30</td><td>7h 30m</td></tr>
+                            <tr><td>SIN-MCT</td><td>EQ325</td><td>A330F</td><td class="days-op-highlight">Mon,Fri</td><td>01:00</td><td>04:00</td><td>7h 00m</td></tr>
+                            <tr><td>SIN-ADD</td><td>EQ605</td><td>A330F</td><td class="days-op-highlight">Fri</td><td>08:00</td><td>13:00</td><td>9h 00m</td></tr>
+                            <tr><td>SIN-LOS</td><td>EQ621</td><td>A330F</td><td class="days-op-highlight">Tue</td><td>07:00</td><td>14:00</td><td>11h 00m</td></tr>
+                            <tr><td>SIN-LHR</td><td>EQ701</td><td>B777</td><td class="days-op-highlight">Daily</td><td>23:45</td><td>06:15+1</td><td>13h 30m</td></tr>
+                            <tr><td>SIN-FRA</td><td>EQ705</td><td>A330F</td><td class="days-op-highlight">Mon,Wed,Fri</td><td>00:30</td><td>07:00+1</td><td>12h 30m</td></tr>
+                            <tr><td>SIN-BKK</td><td>EQ111</td><td>B777</td><td class="days-op-highlight">Ex Tue,Thu,Sat</td><td>18:00</td><td>19:30</td><td>2h 30m</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="schedule-footer-notes">
+                    <i class="fas fa-info-circle icon"></i>All times local. Schedule subject to seasonal adjustments.
+                </div>
+            </div>
+        </section>
+        
         <!-- Merlion Air Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-landmark"></i></span> <!-- Merlion icon idea -->
-                <h2>Merlion Air Cargo Schedule (MC – 618)</h2>
+        <section class="airline-card" id="mc618">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-pastafarianism"></i></span> 
+                <h2>Merlion Air Cargo (MC – 618)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Passenger Fleet Operations. From Singapore Changi (SIN). Valid 01OCT24-30JUN26.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>FLT#</th><th>ROUTE</th><th>DAYS</th><th>DEP SIN</th><th>ARR DEST</th><th>AIRCRAFT</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>MC401</td><td>SIN-BOM</td><td class="days-op">Daily</td><td>19:00</td><td>22:00</td><td>A330</td></tr>
-                    <tr><td>MC001</td><td>SIN-LHR</td><td class="days-op">Daily</td><td>23:30</td><td>06:00+1</td><td>A380</td></tr>
-                    <tr><td>MC411</td><td>SIN-DEL</td><td class="days-op">Daily</td><td>20:00</td><td>23:00</td><td>B787</td></tr>
-                    <tr><td>MC421</td><td>SIN-MAA</td><td class="days-op">Daily</td><td>08:00</td><td>09:30</td><td>A321</td></tr>
-                    <tr><td>MC005</td><td>SIN-AMS</td><td class="days-op">6x weekly (Ex Sat)</td><td>00:30</td><td>07:00+1</td><td>B777</td></tr>
-                    <tr><td>MC431</td><td>SIN-BLR</td><td class="days-op">Daily</td><td>17:00</td><td>18:30</td><td>A330</td></tr>
-                    <tr><td>MC441</td><td>SIN-HYD</td><td class="days-op">5x weekly (Ex Tue,Thu)</td><td>10:00</td><td>11:30</td><td>A330</td></tr>
-                    <tr><td>MC451</td><td>SIN-DAC</td><td class="days-op">4x weekly (Mon,Wed,Fri,Sun)</td><td>14:00</td><td>16:00</td><td>B737</td></tr>
-                    <tr><td>MC007</td><td>SIN-ZRH</td><td class="days-op">Daily</td><td>01:00</td><td>07:30+1</td><td>A350</td></tr>
-                    <tr><td>MC009</td><td>SIN-FRA</td><td class="days-op">Daily</td><td>00:45</td><td>07:15+1</td><td>B777</td></tr>
-                    <tr><td>MC011</td><td>SIN-CDG</td><td class="days-op">5x weekly (Ex Tue,Sat)</td><td>23:55</td><td>06:30+1</td><td>A380</td></tr>
-                    <tr><td>MC101</td><td>SIN-BKK</td><td class="days-op">Daily</td><td>16:00</td><td>17:30</td><td>A330</td></tr>
-                    <tr><td>MC201</td><td>SIN-HKG</td><td class="days-op">Daily</td><td>08:30</td><td>12:30</td><td>B787</td></tr>
-                    <tr><td>MC501</td><td>SIN-SYD</td><td class="days-op">Daily</td><td>22:00</td><td>08:00+1</td><td>A350</td></tr>
-                    <tr><td>MC301</td><td>SIN-DXB</td><td class="days-op">Daily</td><td>02:00</td><td>05:30</td><td>B777</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes">
+                <i class="fas fa-info-circle icon"></i>Passenger Fleet Operations from Singapore Changi (SIN). Valid 01OCT24-30JUN26.
             </div>
-            <p class="sub-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>This schedule is for indicative purposes only. Confirm with reservations.</p>
-        </div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>FLT#</th><th>ROUTE</th><th>DAYS</th><th>DEP SIN</th><th>ARR DEST</th><th>AIRCRAFT</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>MC401</td><td>SIN-BOM</td><td class="days-op-highlight">Daily</td><td>19:00</td><td>22:00</td><td>A330</td></tr>
+                            <tr><td>MC001</td><td>SIN-LHR</td><td class="days-op-highlight">Daily</td><td>23:30</td><td>06:00+1</td><td>A380</td></tr>
+                            <tr><td>MC411</td><td>SIN-DEL</td><td class="days-op-highlight">Daily</td><td>20:00</td><td>23:00</td><td>B787</td></tr>
+                            <tr><td>MC421</td><td>SIN-MAA</td><td class="days-op-highlight">Daily</td><td>08:00</td><td>09:30</td><td>A321</td></tr>
+                            <tr><td>MC005</td><td>SIN-AMS</td><td class="days-op-highlight">6x weekly (Ex Sat)</td><td>00:30</td><td>07:00+1</td><td>B777</td></tr>
+                            <tr><td>MC431</td><td>SIN-BLR</td><td class="days-op-highlight">Daily</td><td>17:00</td><td>18:30</td><td>A330</td></tr>
+                            <tr><td>MC441</td><td>SIN-HYD</td><td class="days-op-highlight">5x weekly (Ex Tue,Thu)</td><td>10:00</td><td>11:30</td><td>A330</td></tr>
+                            <tr><td>MC451</td><td>SIN-DAC</td><td class="days-op-highlight">4x weekly (Mon,Wed,Fri,Sun)</td><td>14:00</td><td>16:00</td><td>B737</td></tr>
+                            <tr><td>MC007</td><td>SIN-ZRH</td><td class="days-op-highlight">Daily</td><td>01:00</td><td>07:30+1</td><td>A350</td></tr>
+                            <tr><td>MC009</td><td>SIN-FRA</td><td class="days-op-highlight">Daily</td><td>00:45</td><td>07:15+1</td><td>B777</td></tr>
+                            <tr><td>MC011</td><td>SIN-CDG</td><td class="days-op-highlight">5x weekly (Ex Tue,Sat)</td><td>23:55</td><td>06:30+1</td><td>A380</td></tr>
+                            <tr><td>MC101</td><td>SIN-BKK</td><td class="days-op-highlight">Daily</td><td>16:00</td><td>17:30</td><td>A330</td></tr>
+                            <tr><td>MC201</td><td>SIN-HKG</td><td class="days-op-highlight">Daily</td><td>08:30</td><td>12:30</td><td>B787</td></tr>
+                            <tr><td>MC501</td><td>SIN-SYD</td><td class="days-op-highlight">Daily</td><td>22:00</td><td>08:00+1</td><td>A350</td></tr>
+                            <tr><td>MC301</td><td>SIN-DXB</td><td class="days-op-highlight">Daily</td><td>02:00</td><td>05:30</td><td>B777</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="schedule-footer-notes">
+                     <i class="fas fa-exclamation-triangle icon icon-warning"></i>This schedule is for indicative purposes only. Confirm with reservations.
+                </div>
+            </div>
+        </section>
 
         <!-- Trans-Global Freighters -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-globe-americas"></i></span>
-                <h2>Trans-Global Freighters - Main Deck Cargo Schedule (TG – 501)</h2>
+        <section class="airline-card" id="tg501">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-globe"></i></span>
+                <h2>Trans-Global Freighters (TG – 501)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>B747F Operations. Effective 01 JAN 2024 - 31 DEC 2026. All times local.<br>Primary Hub: Singapore (SIN). Secondary Hubs: Anchorage (ANC), Miami (MIA).</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Flight</th><th>Route</th><th>Day(s) of Week</th><th>Dep Time</th><th>Arr Time</th><th>Hub Transit</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>TG901</td><td>SIN-ANC-JFK</td><td class="days-op">Tue, Thu, Sat</td><td>06:00 (SIN)</td><td>14:00 (JFK)</td><td>ANC</td></tr>
-                    <tr><td>TG905</td><td>SIN-ANC-MIA</td><td class="days-op">Mon, Fri</td><td>07:00 (SIN)</td><td>16:00 (MIA)</td><td>ANC</td></tr>
-                    <tr><td>TG903</td><td>SIN-ANC-ORD</td><td class="days-op">Wed, Sun</td><td>06:30 (SIN)</td><td>13:30 (ORD)</td><td>ANC</td></tr>
-                    <tr><td>TG Feed</td><td>MIA-GRU</td><td class="days-op">Daily</td><td>Varies</td><td>Varies</td><td><span class="interline-note"><i class="fas fa-truck icon icon-interline-indicator"></i>MIA (Truck/Interline)</span></td></tr>
-                    <tr><td>TG Feed</td><td>MIA-BOG</td><td class="days-op">Daily</td><td>Varies</td><td>Varies</td><td><span class="interline-note"><i class="fas fa-truck icon icon-interline-indicator"></i>MIA (Truck/Interline)</span></td></tr>
-                    <tr><td>TG Feed</td><td>MIA-SCL</td><td class="days-op">Daily</td><td>Varies</td><td>Varies</td><td><span class="interline-note"><i class="fas fa-truck icon icon-interline-indicator"></i>MIA (Truck/Interline)</span></td></tr>
-                    <tr><td>TG701</td><td>SIN-DXB-FRA</td><td class="days-op">Mon, Wed, Fri</td><td>04:00 (SIN)</td><td>15:00 (FRA)</td><td>DXB</td></tr>
-                    <tr><td>TG703</td><td>SIN-DXB-AMS</td><td class="days-op">Tue, Sat</td><td>03:00 (SIN)</td><td>14:00 (AMS)</td><td>DXB</td></tr>
-                    <tr><td>TG705</td><td>SIN-HKG-LHR</td><td class="days-op">Thu, Sun</td><td>05:00 (SIN)</td><td>18:00 (LHR)</td><td>HKG</td></tr>
-                    <tr><td>TG201</td><td>SIN-HKG</td><td class="days-op">Daily</td><td>22:00 (SIN)</td><td>02:00+1 (HKG)</td><td>Direct</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes">
+                <i class="fas fa-info-circle icon"></i>B747F Main Deck Operations. Effective 01 JAN 2024 - 31 DEC 2026. All times local.<br>
+                Primary Hub: SIN. Secondary Hubs: Anchorage (ANC), Miami (MIA). <span class="freighter-note">Freighter Service.</span>
             </div>
-            <p class="sub-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>TG Feed services are coordinated interline/trucking connections. Times are indicative.</p>
-        </div>
-
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>Flight</th><th>Route</th><th>Day(s) of Week</th><th>Dep Time</th><th>Arr Time</th><th>Hub Transit</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>TG901</td><td>SIN-ANC-JFK</td><td class="days-op-highlight">Tue, Thu, Sat</td><td>06:00 (SIN)</td><td>14:00 (JFK)</td><td>ANC</td></tr>
+                            <tr><td>TG905</td><td>SIN-ANC-MIA</td><td class="days-op-highlight">Mon, Fri</td><td>07:00 (SIN)</td><td>16:00 (MIA)</td><td>ANC</td></tr>
+                            <tr><td>TG903</td><td>SIN-ANC-ORD</td><td class="days-op-highlight">Wed, Sun</td><td>06:30 (SIN)</td><td>13:30 (ORD)</td><td>ANC</td></tr>
+                            <tr><td>TG Feed</td><td>MIA-GRU</td><td class="days-op-highlight">Daily</td><td>Varies</td><td>Varies</td><td><span class="remarks-tag interline-tag"><i class="fas fa-truck icon"></i>MIA (Truck/Interline)</span></td></tr>
+                            <tr><td>TG Feed</td><td>MIA-BOG</td><td class="days-op-highlight">Daily</td><td>Varies</td><td>Varies</td><td><span class="remarks-tag interline-tag"><i class="fas fa-truck icon"></i>MIA (Truck/Interline)</span></td></tr>
+                            <tr><td>TG Feed</td><td>MIA-SCL</td><td class="days-op-highlight">Daily</td><td>Varies</td><td>Varies</td><td><span class="remarks-tag interline-tag"><i class="fas fa-truck icon"></i>MIA (Truck/Interline)</span></td></tr>
+                            <tr><td>TG701</td><td>SIN-DXB-FRA</td><td class="days-op-highlight">Mon, Wed, Fri</td><td>04:00 (SIN)</td><td>15:00 (FRA)</td><td>DXB</td></tr>
+                            <tr><td>TG703</td><td>SIN-DXB-AMS</td><td class="days-op-highlight">Tue, Sat</td><td>03:00 (SIN)</td><td>14:00 (AMS)</td><td>DXB</td></tr>
+                            <tr><td>TG705</td><td>SIN-HKG-LHR</td><td class="days-op-highlight">Thu, Sun</td><td>05:00 (SIN)</td><td>18:00 (LHR)</td><td>HKG</td></tr>
+                            <tr><td>TG201</td><td>SIN-HKG</td><td class="days-op-highlight">Daily</td><td>22:00 (SIN)</td><td>02:00+1 (HKG)</td><td>Direct</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="schedule-footer-notes">
+                    <i class="fas fa-exclamation-triangle icon icon-warning"></i>TG Feed services are coordinated interline/trucking connections. Times are indicative.
+                </div>
+            </div>
+        </section>
+        
         <!-- SkyLane Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-fighter-jet"></i></span>
-                <h2>SkyLane Cargo - Flight Schedule (SL – 333)</h2>
+        <section class="airline-card" id="sl333">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-fighter-jet"></i></span>
+                 <h2>SkyLane Cargo (SL – 333)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Intra-Asia Budget Carrier. A320 Aircraft. Valid 01OCT24 - 31DEC24. All times local. SIN origin. <span class="freighter-note">No DG carried.</span></p>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Jakarta (CGK):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL801:</strong> Dep 09:00, Arr 10:00 (Daily)</li>
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL803:</strong> Dep 18:00, Arr 19:00 (Daily)</li>
-            </ul>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Kuala Lumpur (KUL):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL851:</strong> Dep 08:00, Arr 09:00 (Daily)</li>
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL853:</strong> Dep 14:00, Arr 15:00 (Daily)</li>
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL855:</strong> Dep 20:00, Arr 21:00 (Daily)</li>
-            </ul>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Penang (PEN):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL861:</strong> Dep 15:00, Arr 16:30 (Daily)</li>
-            </ul>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Surabaya (SUB):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL811:</strong> Dep 10:00, Arr 11:30 (Mon, Wed, Fri, Sun)</li>
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL813:</strong> Dep 17:00, Arr 18:30 (Tue, Thu, Sat)</li>
-            </ul>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Bangkok (BKK):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL821:</strong> Dep 11:00, Arr 12:30 (Daily)</li>
-            </ul>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Ho Chi Minh (SGN):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL831:</strong> Dep 13:00, Arr 14:00 (Daily)</li>
-            </ul>
-            <h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Manila (MNL):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-plane-departure icon"></i><strong>SL841:</strong> Dep 07:00, Arr 10:30 (Mon, Wed, Fri)</li>
-            </ul>
-            <p class="sub-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>Schedule is subject to slot availability.</p>
-        </div>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Intra-Asia Budget Carrier. A320 Aircraft. Valid 01OCT24 - 31DEC24. <span class="freighter-note">No DG carried.</span></div>
+            <div class="airline-card-body">
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Jakarta (CGK)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL801:</strong> Dep 09:00, Arr 10:00 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL803:</strong> Dep 18:00, Arr 19:00 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Kuala Lumpur (KUL)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL851:</strong> Dep 08:00, Arr 09:00 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL853:</strong> Dep 14:00, Arr 15:00 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL855:</strong> Dep 20:00, Arr 21:00 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Penang (PEN)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL861:</strong> Dep 15:00, Arr 16:30 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Surabaya (SUB)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL811:</strong> Dep 10:00, Arr 11:30 (Mon, Wed, Fri, Sun)</span></div><div class="flight-aircraft">A320</div></li>
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL813:</strong> Dep 17:00, Arr 18:30 (Tue, Thu, Sat)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Bangkok (BKK)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL821:</strong> Dep 11:00, Arr 12:30 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Ho Chi Minh (SGN)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL831:</strong> Dep 13:00, Arr 14:00 (Daily)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                <div class="list-schedule-group"><h3><i class="fas fa-map-marker-alt icon icon-list-route"></i>To Manila (MNL)</h3>
+                    <ul class="flight-list">
+                        <li><i class="fas fa-plane-departure icon"></i><div class="flight-info"><span class="flight-route-time"><strong>SL841:</strong> Dep 07:00, Arr 10:30 (Mon, Wed, Fri)</span></div><div class="flight-aircraft">A320</div></li>
+                    </ul>
+                </div>
+                 <div class="schedule-footer-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>Schedule subject to slot availability.</div>
+            </div>
+        </section>
 
         <!-- Zenith Air Freight -->
-        <div class="airline-section">
-            <div class="airline-header">
-                 <span class="airline-header-icon"><i class="fas fa-sun"></i></span> <!-- Zenith icon idea -->
-                <h2>Zenith Air Freight - European Service Schedule (ZA – 412)</h2>
+        <section class="airline-card" id="za412">
+            <div class="airline-card-header">
+                 <span class="airline-header-icon icon"><i class="fas fa-sun"></i></span>
+                <h2>Zenith Air Freight (ZA – 412)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>B787 Passenger Aircraft. Effective 01 AUG 2024 - 31 JAN 2026. From Singapore (SIN). Limited DG (Class 9) only.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Flight</th><th>Destination</th><th>Departs SIN</th><th>Arrives Local</th><th>Days of Operation</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>ZA501</td><td>Zurich (ZRH)</td><td>23:00</td><td>06:30+1</td><td class="days-op">Mon, Wed, Fri, Sun</td></tr>
-                    <tr><td>ZA511</td><td>Vienna (VIE)</td><td>23:30</td><td>06:00+1</td><td class="days-op">Tue, Thu, Sat</td></tr>
-                    <tr><td>ZA521</td><td>Barcelona (BCN)</td><td>00:10</td><td>07:30+1</td><td class="days-op">Mon, Thu, Sat</td></tr>
-                    <tr><td>ZA531</td><td>Milan (MXP)</td><td>00:05</td><td>07:00+1</td><td class="days-op">Tue, Fri, Sun</td></tr>
-                    <tr><td>ZA541</td><td>Amsterdam (AMS)</td><td>23:45</td><td>06:45+1</td><td class="days-op">Daily</td></tr>
-                    <tr><td>ZA551</td><td>Frankfurt (FRA)</td><td>23:55</td><td>06:50+1</td><td class="days-op">Daily</td></tr>
-                    <tr><td>ZA561</td><td>Paris (CDG)</td><td>00:15</td><td>07:45+1</td><td class="days-op">Mon, Wed, Fri, Sat</td></tr>
-                    <tr><td>ZA571</td><td>Copenhagen (CPH)</td><td>00:20</td><td>07:10+1</td><td class="days-op">Tue, Thu, Sun</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>European Service. B787 Passenger Aircraft. Effective 01 AUG 2024 - 31 JAN 2026. Limited DG (Class 9 only).</div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Flight</th><th>Destination</th><th>Departs SIN</th><th>Arrives Local</th><th>Days of Operation</th></tr></thead>
+                    <tbody>
+                        <tr><td>ZA501</td><td>Zurich (ZRH)</td><td>23:00</td><td>06:30+1</td><td class="days-op-highlight">Mon, Wed, Fri, Sun</td></tr>
+                        <tr><td>ZA511</td><td>Vienna (VIE)</td><td>23:30</td><td>06:00+1</td><td class="days-op-highlight">Tue, Thu, Sat</td></tr>
+                        <tr><td>ZA521</td><td>Barcelona (BCN)</td><td>00:10</td><td>07:30+1</td><td class="days-op-highlight">Mon, Thu, Sat</td></tr>
+                        <tr><td>ZA531</td><td>Milan (MXP)</td><td>00:05</td><td>07:00+1</td><td class="days-op-highlight">Tue, Fri, Sun</td></tr>
+                        <tr><td>ZA541</td><td>Amsterdam (AMS)</td><td>23:45</td><td>06:45+1</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>ZA551</td><td>Frankfurt (FRA)</td><td>23:55</td><td>06:50+1</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>ZA561</td><td>Paris (CDG)</td><td>00:15</td><td>07:45+1</td><td class="days-op-highlight">Mon, Wed, Fri, Sat</td></tr>
+                        <tr><td>ZA571</td><td>Copenhagen (CPH)</td><td>00:20</td><td>07:10+1</td><td class="days-op-highlight">Tue, Thu, Sun</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>All times local. "+1" indicates next day arrival.</div>
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>All times are local. "+1" indicates arrival on the next day.</p>
-        </div>
+        </section>
 
         <!-- Arctic Cargo Routes -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="far fa-snowflake"></i></span>
-                <h2>Arctic Cargo Routes - Polar Freighter Schedule (AR – 299)</h2>
+        <section class="airline-card" id="ar299">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="far fa-snowflake"></i></span>
+                <h2>Arctic Cargo Routes (AR – 299)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>B747F Operations via Anchorage (ANC). From Singapore (SIN). Valid 01OCT24-31MAR26. All departures from SIN. Arrival times are local to destination. ANC is a technical and cargo hub. <span class="freighter-note">Freighter Only.</span></p>
-            <h3><i class="fas fa-map-signs icon icon-list-route"></i>Westbound Transpacific Services:</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AR771 SIN-ANC-SEA:</strong> Dep SIN 05:00 (Wed, Sun) → Arr SEA 09:00 (local same day)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AR773 SIN-ANC-LAX:</strong> Dep SIN 05:30 (Fri) → Arr LAX 10:30 (local same day)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AR775 SIN-ANC-ORD:</strong> Dep SIN 06:00 (Tue) → Arr ORD 13:00 (local same day)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AR777 SIN-ANC-JFK:</strong> Dep SIN 05:00 (Mon, Thu) → Arr JFK 14:00 (local same day)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AR779 SIN-ANC-YYC:</strong> Dep SIN 06:30 (Sat) → Arr YYC 12:30 (local same day)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AR781 SIN-ANC (Terminates):</strong> Dep SIN 04:00 (Wed) → Arr ANC 20:00 (local prev. day)</li>
-            </ul>
-        </div>
+            <div class="airline-card-sub-notes">
+                <i class="fas fa-info-circle icon"></i>Polar Freighter Schedule. B747F via Anchorage (ANC). Valid 01OCT24-31MAR26. <span class="freighter-note">Freighter Only.</span>
+            </div>
+            <div class="airline-card-body">
+                <div class="list-schedule-group"><h3><i class="fas fa-map-signs icon icon-list-route"></i>Westbound Transpacific Services (from SIN):</h3>
+                <ul class="flight-list">
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AR771 SIN-ANC-SEA:</strong> Dep 05:00 (Wed, Sun) → Arr SEA 09:00 (local same day)</span></div><div class="flight-aircraft">B747F</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AR773 SIN-ANC-LAX:</strong> Dep 05:30 (Fri) → Arr LAX 10:30 (local same day)</span></div><div class="flight-aircraft">B747F</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AR775 SIN-ANC-ORD:</strong> Dep 06:00 (Tue) → Arr ORD 13:00 (local same day)</span></div><div class="flight-aircraft">B747F</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AR777 SIN-ANC-JFK:</strong> Dep 05:00 (Mon, Thu) → Arr JFK 14:00 (local same day)</span></div><div class="flight-aircraft">B747F</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AR779 SIN-ANC-YYC:</strong> Dep 06:30 (Sat) → Arr YYC 12:30 (local same day)</span></div><div class="flight-aircraft">B747F</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AR781 SIN-ANC (Terminates):</strong> Dep 04:00 (Wed) → Arr ANC 20:00 (local prev. day)</span></div><div class="flight-aircraft">B747F</div></li>
+                </ul>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-anchor icon"></i>ANC is a technical and cargo hub. Arrival times local to destination.</div>
+            </div>
+        </section>
 
         <!-- Silk Road Airways -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-road"></i></span> <!-- Silk Road icon idea -->
-                <h2>Silk Road Airways - Central Asia & Turkey Schedule (SR – 707)</h2>
+        <section class="airline-card" id="sr707">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-road"></i></span>
+                <h2>Silk Road Airways (SR – 707)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>A330F Operations from Singapore (SIN). Effective 01SEP24 - 28FEB26. Limited DG (Class 9 only).</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Flight No.</th><th>Route</th><th>Frequency</th><th>Dep Time (SIN)</th><th>Arr Time (Local)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>SR521</td><td>SIN-ALA</td><td class="days-op">1x weekly (Fri)</td><td>03:00</td><td>10:00 (ALA)</td></tr>
-                    <tr><td>SR531</td><td>SIN-TAS</td><td class="days-op">1x weekly (Tue)</td><td>04:00</td><td>11:30 (TAS)</td></tr>
-                    <tr><td>SR541</td><td>SIN-FRU</td><td class="days-op">1x weekly (Thu)</td><td>02:00</td><td>09:00 (FRU)</td></tr>
-                    <tr><td>SR551</td><td>SIN-DYU</td><td class="days-op">1x weekly (Sun)</td><td>01:00</td><td>08:00 (DYU)</td></tr>
-                    <tr><td>SR561</td><td>SIN-GYD-TBS</td><td class="days-op">1x weekly (Wed)</td><td>00:30</td><td>07:30 (GYD) / 10:00 (TBS)</td></tr>
-                    <tr><td>SR571</td><td>SIN-GYD-IST</td><td class="days-op">1x weekly (Sat)</td><td>23:00 (-1 day)</td><td>06:00 (GYD) / 09:00 (IST)</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Central Asia & Turkey. A330F Operations. Effective 01SEP24 - 28FEB26. Limited DG (Class 9 only).</div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Flight No.</th><th>Route</th><th>Frequency</th><th>Dep Time (SIN)</th><th>Arr Time (Local)</th></tr></thead>
+                    <tbody>
+                        <tr><td>SR521</td><td>SIN-ALA</td><td class="days-op-highlight">1x weekly (Fri)</td><td>03:00</td><td>10:00 (ALA)</td></tr>
+                        <tr><td>SR531</td><td>SIN-TAS</td><td class="days-op-highlight">1x weekly (Tue)</td><td>04:00</td><td>11:30 (TAS)</td></tr>
+                        <tr><td>SR541</td><td>SIN-FRU</td><td class="days-op-highlight">1x weekly (Thu)</td><td>02:00</td><td>09:00 (FRU)</td></tr>
+                        <tr><td>SR551</td><td>SIN-DYU</td><td class="days-op-highlight">1x weekly (Sun)</td><td>01:00</td><td>08:00 (DYU)</td></tr>
+                        <tr><td>SR561</td><td>SIN-GYD-TBS</td><td class="days-op-highlight">1x weekly (Wed)</td><td>00:30</td><td>07:30 (GYD) / 10:00 (TBS)</td></tr>
+                        <tr><td>SR571</td><td>SIN-GYD-IST</td><td class="days-op-highlight">1x weekly (Sat)</td><td>23:00 (-1 day)</td><td>06:00 (GYD) / 09:00 (IST)</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-map-pin icon"></i>GYD = Baku, TBS = Tbilisi, IST = Istanbul.</div>
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>GYD = Baku, TBS = Tbilisi, IST = Istanbul.</p>
-        </div>
+        </section>
 
         <!-- Southern Cross Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-star"></i></span> <!-- Southern Cross icon idea -->
-                <h2>Southern Cross Cargo - Oceania Flight Schedule (SC – 888)</h2>
+        <section class="airline-card" id="sc888">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-star"></i></span>
+                <h2>Southern Cross Cargo (SC – 888)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Passenger Aircraft Network. From Singapore (SIN). Effective 01JUL24 - 31DEC24.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Route</th><th>Flight</th><th>Dep SIN</th><th>Arr Local</th><th>Frequency</th><th>Aircraft</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN-AKL</td><td>SC601</td><td>08:00</td><td>22:00</td><td class="days-op">Daily</td><td>B777</td></tr>
-                    <tr><td>SIN-PER</td><td>SC611</td><td>18:00</td><td>23:00</td><td class="days-op">Daily</td><td>A330</td></tr>
-                    <tr><td>SIN-SYD</td><td>SC621</td><td>20:00</td><td>06:30+1</td><td class="days-op">Daily</td><td>A350</td></tr>
-                    <tr><td>SIN-MEL</td><td>SC631</td><td>21:00</td><td>07:30+1</td><td class="days-op">Daily</td><td>B787</td></tr>
-                    <tr><td>SIN-BNE</td><td>SC641</td><td>19:30</td><td>05:30+1</td><td class="days-op">5x Weekly (Ex Tue,Sat)</td><td>B787</td></tr>
-                    <tr><td>SIN-ADL</td><td>SC651</td><td>09:00</td><td>17:00</td><td class="days-op">4x Weekly (Mon,Wed,Fri,Sun)</td><td>A330</td></tr>
-                    <tr><td>SIN-CHC</td><td>SC605</td><td>08:00</td><td>00:30+1 (via AKL)</td><td class="days-op">Daily (Connects SC601)</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>B777/Partner</span></td></tr>
-                    <tr><td>SIN-NAN</td><td>SC681</td><td>22:00</td><td>10:00+1 (via SYD)</td><td class="days-op">3x Weekly (Connects SC621)</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>A350/Partner</span></td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Oceania Passenger Network. Effective 01JUL24 - 31DEC24.</div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Route</th><th>Flight</th><th>Dep SIN</th><th>Arr Local</th><th>Frequency</th><th>Aircraft</th></tr></thead>
+                    <tbody>
+                        <tr><td>SIN-AKL</td><td>SC601</td><td>08:00</td><td>22:00</td><td class="days-op-highlight">Daily</td><td>B777</td></tr>
+                        <tr><td>SIN-PER</td><td>SC611</td><td>18:00</td><td>23:00</td><td class="days-op-highlight">Daily</td><td>A330</td></tr>
+                        <tr><td>SIN-SYD</td><td>SC621</td><td>20:00</td><td>06:30+1</td><td class="days-op-highlight">Daily</td><td>A350</td></tr>
+                        <tr><td>SIN-MEL</td><td>SC631</td><td>21:00</td><td>07:30+1</td><td class="days-op-highlight">Daily</td><td>B787</td></tr>
+                        <tr><td>SIN-BNE</td><td>SC641</td><td>19:30</td><td>05:30+1</td><td class="days-op-highlight">5x Weekly (Ex Tue,Sat)</td><td>B787</td></tr>
+                        <tr><td>SIN-ADL</td><td>SC651</td><td>09:00</td><td>17:00</td><td class="days-op-highlight">4x Weekly (Mon,Wed,Fri,Sun)</td><td>A330</td></tr>
+                        <tr><td>SIN-CHC</td><td>SC605</td><td>08:00</td><td>00:30+1 (via AKL)</td><td class="days-op-highlight">Daily</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>B777/Partner</span></td></tr>
+                        <tr><td>SIN-NAN</td><td>SC681</td><td>22:00</td><td>10:00+1 (via SYD)</td><td class="days-op-highlight">3x Weekly</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>A350/Partner</span></td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>All times local. "+1" indicates next day arrival. Interline connections subject to partner schedules.</div>
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>All times local. "+1" indicates next day arrival. Interline connections subject to partner schedules.</p>
-        </div>
+        </section>
 
         <!-- Alpha Freight Systems -->
-        <div class="airline-section">
-            <div class="airline-header">
-                 <span class="airline-header-icon"><i class="fab fa-autoprefixer"></i></span> <!-- Alpha icon (A) -->
-                <h2>Alpha Freight Systems - European Schedule (AF – 101)</h2>
+        <section class="airline-card" id="af101">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fab fa-autoprefixer"></i></span>
+                <h2>Alpha Freight Systems (AF – 101)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>From Singapore (SIN). Passenger Fleet. Valid 01OCT24 - 31MAR26. All departure/arrival times are local. Check GDS for latest updates.</p>
-            <h3><i class="fas fa-plane-arrival icon icon-list-route"></i>AF FLIGHTS TO EUROPE</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF701 SIN-CDG:</strong> Daily, Dep 00:30, Arr 07:30 (A350)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF711 SIN-MXP:</strong> Mon, Wed, Fri, Sun, Dep 23:50, Arr 06:30+1 (B777)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF721 SIN-FRA:</strong> Daily, Dep 01:00, Arr 07:45 (B777)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF731 SIN-AMS:</strong> Daily (Ex Tue), Dep 00:15, Arr 07:00+1 (B777)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF741 SIN-FCO:</strong> Tue, Thu, Sat, Dep 23:30, Arr 06:15+1 (B777)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF751 SIN-MAD:</strong> Mon, Wed, Fri, Dep 00:05, Arr 07:30+1 (A350)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF761 SIN-LHR:</strong> Daily, Dep 00:50, Arr 07:20+1 (A350)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>AF771 SIN-ZRH:</strong> Tue, Thu, Sat, Sun, Dep 01:10, Arr 07:50+1 (A350)</li>
-            </ul>
-        </div>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>European Routes. Passenger Fleet. Valid 01OCT24 - 31MAR26. Check GDS for updates.</div>
+            <div class="airline-card-body">
+                <div class="list-schedule-group"><h3><i class="fas fa-plane-arrival icon icon-list-route"></i>AF FLIGHTS TO EUROPE (from SIN):</h3>
+                <ul class="flight-list">
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF701 SIN-CDG:</strong> Daily, Dep 00:30 → Arr 07:30</span></div><div class="flight-aircraft">A350</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF711 SIN-MXP:</strong> Mon,Wed,Fri,Sun, Dep 23:50 → Arr 06:30+1</span></div><div class="flight-aircraft">B777</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF721 SIN-FRA:</strong> Daily, Dep 01:00 → Arr 07:45</span></div><div class="flight-aircraft">B777</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF731 SIN-AMS:</strong> Daily (Ex Tue), Dep 00:15 → Arr 07:00+1</span></div><div class="flight-aircraft">B777</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF741 SIN-FCO:</strong> Tue,Thu,Sat, Dep 23:30 → Arr 06:15+1</span></div><div class="flight-aircraft">B777</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF751 SIN-MAD:</strong> Mon,Wed,Fri, Dep 00:05 → Arr 07:30+1</span></div><div class="flight-aircraft">A350</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF761 SIN-LHR:</strong> Daily, Dep 00:50 → Arr 07:20+1</span></div><div class="flight-aircraft">A350</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>AF771 SIN-ZRH:</strong> Tue,Thu,Sat,Sun, Dep 01:10 → Arr 07:50+1</span></div><div class="flight-aircraft">A350</div></li>
+                </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Beta Cargo Lines -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fab fa-bootstrap"></i></span> <!-- Beta icon (B) -->
-                <h2>Beta Cargo Lines - SE Asia Passenger Network (BC – 202)</h2>
+        <section class="airline-card" id="bc202">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fab fa-bootstrap"></i></span>
+                <h2>Beta Cargo Lines (BC – 202)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Schedule from Singapore (SIN). Effective 15NOV24 - 15MAY26. <span class="freighter-note">NO DANGEROUS GOODS CARRIED.</span> Times are local. Schedule subject to change.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Destination</th><th>Flight</th><th>Dep Time</th><th>Arr Time</th><th>Aircraft</th><th>Frequency</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Ho Chi Minh (SGN)</td><td>BC501</td><td>10:00</td><td>11:00</td><td>A321</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Manila (MNL)</td><td>BC511</td><td>14:00</td><td>17:30</td><td>A330</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Bangkok (BKK)</td><td>BC521</td><td>09:00</td><td>10:30</td><td>A321</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Yangon (RGN)</td><td>BC531</td><td>11:00</td><td>12:30</td><td>A320</td><td class="days-op">3x weekly (Mon,Wed,Fri)</td></tr>
-                    <tr><td>Kuala Lumpur (KUL)</td><td>BC541</td><td>07:30</td><td>08:30</td><td>A321</td><td class="days-op">2x Daily (0730 & 1630)</td></tr>
-                    <tr><td>Jakarta (CGK)</td><td>BC551</td><td>13:00</td><td>14:00</td><td>A320</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Penang (PEN)</td><td>BC561</td><td>15:30</td><td>17:00</td><td>A320</td><td class="days-op">4x weekly (Ex Tue,Thu,Sat)</td></tr>
-                    <tr><td>Phnom Penh (PNH)</td><td>BC571</td><td>08:00</td><td>09:00</td><td>A320</td><td class="days-op">5x weekly (Ex Sat,Sun)</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>SE Asia Network. Effective 15NOV24 - 15MAY26. <span class="freighter-note">NO DG CARRIED.</span></div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Destination</th><th>Flight</th><th>Dep Time</th><th>Arr Time</th><th>Aircraft</th><th>Frequency</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ho Chi Minh (SGN)</td><td>BC501</td><td>10:00</td><td>11:00</td><td>A321</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Manila (MNL)</td><td>BC511</td><td>14:00</td><td>17:30</td><td>A330</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Bangkok (BKK)</td><td>BC521</td><td>09:00</td><td>10:30</td><td>A321</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Yangon (RGN)</td><td>BC531</td><td>11:00</td><td>12:30</td><td>A320</td><td class="days-op-highlight">3x weekly (Mon,Wed,Fri)</td></tr>
+                        <tr><td>Kuala Lumpur (KUL)</td><td>BC541</td><td>07:30</td><td>08:30</td><td>A321</td><td class="days-op-highlight">2x Daily (0730 & 1630)</td></tr>
+                        <tr><td>Jakarta (CGK)</td><td>BC551</td><td>13:00</td><td>14:00</td><td>A320</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Penang (PEN)</td><td>BC561</td><td>15:30</td><td>17:00</td><td>A320</td><td class="days-op-highlight">4x weekly (Ex Tue,Thu,Sat)</td></tr>
+                        <tr><td>Phnom Penh (PNH)</td><td>BC571</td><td>08:00</td><td>09:00</td><td>A320</td><td class="days-op-highlight">5x weekly (Ex Sat,Sun)</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>Times are local. Schedule subject to change.</div>
             </div>
-        </div>
+        </section>
 
         <!-- Gamma Global Freight -->
-        <div class="airline-section">
-            <div class="airline-header">
-                 <span class="airline-header-icon"><i class="fas fa-space-shuttle"></i></span> <!-- Gamma icon (G) or other generic icon -->
-                <h2>Gamma Global Freight - Freighter Operations Schedule (GG – 303)</h2>
+        <section class="airline-card" id="gg303">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-shuttle-space"></i></span>
+                <h2>Gamma Global Freight (GG – 303)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>Main Deck Services from Singapore (SIN). Valid 01DEC24 - 30JUN26. Full DG Capability (Excl. Class 1, 7).</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Route</th><th>Flight</th><th>Days</th><th>Depart SIN</th><th>Arrival Local</th><th>Aircraft</th><th>Notes</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN-IST-LUX</td><td>GG401</td><td class="days-op">Mon, Wed, Fri</td><td>04:00</td><td>15:00 (LUX)</td><td>B747F</td><td>Tech Stop IST</td></tr>
-                    <tr><td>SIN-DXB-LEJ</td><td>GG405</td><td class="days-op">Tue, Sat</td><td>03:00</td><td>14:00 (LEJ)</td><td>B777F</td><td>Tech Stop DXB</td></tr>
-                    <tr><td>SIN-AMS</td><td>GG407</td><td class="days-op">Thu, Sun</td><td>02:00</td><td>09:00+1</td><td>B747F</td><td>Direct</td></tr>
-                    <tr><td>SIN-FRA</td><td>GG409</td><td class="days-op">Mon, Wed, Sat</td><td>01:00</td><td>07:30+1</td><td>B777F</td><td>Direct</td></tr>
-                    <tr><td>SIN-ORD</td><td>GG411</td><td class="days-op">Tue, Fri</td><td>05:00</td><td>10:00 (via ANC)</td><td>B747F</td><td><span class="interline-note"><i class="fas fa-anchor icon icon-interline-indicator"></i>Tech Stop ANC</span></td></tr>
-                    <tr><td>SIN-HKG</td><td>GG421</td><td class="days-op">Daily</td><td>23:00</td><td>03:00+1</td><td>B777F</td><td>Direct</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Freighter Operations from SIN. Valid 01DEC24 - 30JUN26. Full DG Capability (Excl. Class 1, 7).</div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                     <thead><tr><th>Route</th><th>Flight</th><th>Days</th><th>Depart SIN</th><th>Arrival Local</th><th>Aircraft</th><th>Notes</th></tr></thead>
+                    <tbody>
+                        <tr><td>SIN-IST-LUX</td><td>GG401</td><td class="days-op-highlight">Mon, Wed, Fri</td><td>04:00</td><td>15:00 (LUX)</td><td>B747F</td><td>Tech Stop IST</td></tr>
+                        <tr><td>SIN-DXB-LEJ</td><td>GG405</td><td class="days-op-highlight">Tue, Sat</td><td>03:00</td><td>14:00 (LEJ)</td><td>B777F</td><td>Tech Stop DXB</td></tr>
+                        <tr><td>SIN-AMS</td><td>GG407</td><td class="days-op-highlight">Thu, Sun</td><td>02:00</td><td>09:00+1</td><td>B747F</td><td>Direct</td></tr>
+                        <tr><td>SIN-FRA</td><td>GG409</td><td class="days-op-highlight">Mon, Wed, Sat</td><td>01:00</td><td>07:30+1</td><td>B777F</td><td>Direct</td></tr>
+                        <tr><td>SIN-ORD</td><td>GG411</td><td class="days-op-highlight">Tue, Fri</td><td>05:00</td><td>10:00 (via ANC)</td><td>B747F</td><td><span class="remarks-tag interline-tag"><i class="fas fa-anchor icon"></i>Tech Stop ANC</span></td></tr>
+                        <tr><td>SIN-HKG</td><td>GG421</td><td class="days-op-highlight">Daily</td><td>23:00</td><td>03:00+1</td><td>B777F</td><td>Direct</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>All times local. "+1" indicates next day arrival.</div>
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>All times local. "+1" indicates next day arrival.</p>
-        </div>
+        </section>
 
         <!-- Dela Airways Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-delta"></i></span> <!-- Delta/D icon -->
-                <h2>Dela Airways Cargo - USA Interline Schedule Program (DL – 404)</h2>
+        <section class="airline-card" id="dl404">
+            <div class="airline-card-header">
+                 <span class="airline-header-icon icon"><i class="fas fa-network-wired"></i></span>
+                <h2>Dela Airways Cargo (DL – 404)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>From Singapore (SIN) via NRT/ICN. Effective 01SEP24 - 31MAR26. Times are indicative for SIN departure to Gateway. Onward connection varies by partner. DG acceptance depends on final carrier.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Destination</th><th>Gateway(s)</th><th>Indicative SIN Dep Flt</th><th>SIN Dep Time</th><th>Partner Airlines</th><th>Notes</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Atlanta (ATL)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, NH, DL</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>Detroit (DTW)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, NH, DL</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>Minneapolis (MSP)</td><td>ICN</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, DL</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>Seattle (SEA)</td><td>ICN/NRT</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, NH, DL</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>Los Angeles (LAX)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, NH, DL, AA</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>New York (JFK)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, NH, DL, AA</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>Chicago (ORD)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, NH, DL, AA</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                    <tr><td>Dallas (DFW)</td><td>ICN/NRT</td><td>DL Interline</td><td class="days-op">Daily Varies</td><td>KE, AA</td><td><span class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i>Connect via Partner</span></td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>USA Interline Program from SIN via NRT/ICN. Effective 01SEP24 - 31MAR26. Times indicative. DG acceptance via partner.</div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Destination</th><th>Gateway(s)</th><th>Indicative SIN Dep Flt</th><th>SIN Dep Time</th><th>Partner Airlines</th><th>Notes</th></tr></thead>
+                    <tbody>
+                        <tr><td>Atlanta (ATL)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, NH, DL</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>Detroit (DTW)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, NH, DL</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>Minneapolis (MSP)</td><td>ICN</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, DL</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>Seattle (SEA)</td><td>ICN/NRT</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, NH, DL</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>Los Angeles (LAX)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, NH, DL, AA</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>New York (JFK)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, NH, DL, AA</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>Chicago (ORD)</td><td>NRT/ICN</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, NH, DL, AA</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                        <tr><td>Dallas (DFW)</td><td>ICN/NRT</td><td>DL Interline</td><td class="days-op-highlight">Daily Varies</td><td>KE, AA</td><td><span class="remarks-tag interline-tag"><i class="fas fa-handshake icon"></i>Connect via Partner</span></td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>Specific flight details confirmed at booking with partner.</div>
             </div>
-            <p class="sub-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>Specific flight numbers and arrival times for US destinations are subject to partner airline schedules and confirmed at booking.</p>
-        </div>
+        </section>
 
         <!-- Epsilon Air Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                 <span class="airline-header-icon"><i class="fas fa-vial"></i></span> <!-- Epsilon / Pharma icon -->
-                <h2>Epsilon Air Cargo - Specialized Pharma Flight Schedule (EP – 505)</h2>
+        <section class="airline-card" id="ep505">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-prescription-bottle-alt"></i></span>
+                <h2>Epsilon Air Cargo (EP – 505)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>B777F Temperature Controlled Fleet. From Singapore (SIN). Valid 01OCT24 - 30APR26. All flights are dedicated Pharma services. <span class="freighter-note">Pre-booking essential.</span></p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Flight ID</th><th>Destination(s)</th><th>Dep. SIN</th><th>Arr. Local</th><th>Frequency</th><th>Routing Notes</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>EP801</td><td>SIN-BRU</td><td>22:00</td><td>06:00+1</td><td class="days-op">2x weekly (Tue,Fri)</td><td>Direct</td></tr>
-                    <tr><td>EP803</td><td>SIN-BSL</td><td>23:00</td><td>07:00+1</td><td class="days-op">1x weekly (Sun)</td><td>Direct</td></tr>
-                    <tr><td>EP805</td><td>SIN-MXP</td><td>22:30</td><td>06:30+1</td><td class="days-op">2x weekly (Mon,Thu)</td><td>Direct</td></tr>
-                    <tr><td>EP807</td><td>SIN-FRA-ORD</td><td>18:00</td><td>08:00+1 (ORD)</td><td class="days-op">2x weekly (Wed,Sat)</td><td>Tech Stop FRA</td></tr>
-                    <tr><td>EP809</td><td>SIN-AMS</td><td>21:00</td><td>05:00+1</td><td class="days-op">3x weekly (M,W,F)</td><td>Direct</td></tr>
-                    <tr><td>EP811</td><td>SIN-FRA</td><td>20:00</td><td>04:00+1</td><td class="days-op">2x weekly (Tue,Thu)</td><td>Direct</td></tr>
-                    <tr><td>EP813</td><td>SIN-AMS-JFK</td><td>17:00</td><td>09:00+1 (JFK)</td><td class="days-op">1x weekly (Sun)</td><td>Tech Stop AMS</td></tr>
-                    <tr><td>EP815</td><td>SIN-DXB-GRU</td><td>15:00</td><td>05:00+1 (GRU)</td><td class="days-op">1x weekly (Sat)</td><td><span class="interline-note"><i class="fas fa-map-marker-alt icon icon-interline-indicator"></i>Tech Stops DXB, DKR</span></td></tr>
-                    <tr><td>EP817</td><td>SIN-NRT</td><td>01:00</td><td>09:00</td><td class="days-op">2x weekly (Wed,Sun)</td><td>Direct</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Specialized Pharma Logistics. B777F Temp Controlled. Valid 01OCT24 - 30APR26. <span class="freighter-note">Pre-booking essential.</span></div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Flight ID</th><th>Destination(s)</th><th>Dep. SIN</th><th>Arr. Local</th><th>Frequency</th><th>Routing Notes</th></tr></thead>
+                    <tbody>
+                        <tr><td>EP801</td><td>SIN-BRU</td><td>22:00</td><td>06:00+1</td><td class="days-op-highlight">2x weekly (Tue,Fri)</td><td>Direct</td></tr>
+                        <tr><td>EP803</td><td>SIN-BSL</td><td>23:00</td><td>07:00+1</td><td class="days-op-highlight">1x weekly (Sun)</td><td>Direct</td></tr>
+                        <tr><td>EP805</td><td>SIN-MXP</td><td>22:30</td><td>06:30+1</td><td class="days-op-highlight">2x weekly (Mon,Thu)</td><td>Direct</td></tr>
+                        <tr><td>EP807</td><td>SIN-FRA-ORD</td><td>18:00</td><td>08:00+1 (ORD)</td><td class="days-op-highlight">2x weekly (Wed,Sat)</td><td>Tech Stop FRA</td></tr>
+                        <tr><td>EP809</td><td>SIN-AMS</td><td>21:00</td><td>05:00+1</td><td class="days-op-highlight">3x weekly (M,W,F)</td><td>Direct</td></tr>
+                        <tr><td>EP811</td><td>SIN-FRA</td><td>20:00</td><td>04:00+1</td><td class="days-op-highlight">2x weekly (Tue,Thu)</td><td>Direct</td></tr>
+                        <tr><td>EP813</td><td>SIN-AMS-JFK</td><td>17:00</td><td>09:00+1 (JFK)</td><td class="days-op-highlight">1x weekly (Sun)</td><td>Tech Stop AMS</td></tr>
+                        <tr><td>EP815</td><td>SIN-DXB-GRU</td><td>15:00</td><td>05:00+1 (GRU)</td><td class="days-op-highlight">1x weekly (Sat)</td><td><span class="remarks-tag interline-tag"><i class="fas fa-map-marker-alt icon"></i>Tech Stops DXB, DKR</span></td></tr>
+                        <tr><td>EP817</td><td>SIN-NRT</td><td>01:00</td><td>09:00</td><td class="days-op-highlight">2x weekly (Wed,Sun)</td><td>Direct</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>All times local. "+1" indicates next day arrival.</div>
             </div>
-            <p class="sub-notes"><i class="fas fa-info-circle icon icon-info"></i>All times local. "+1" indicates next day arrival.</p>
-        </div>
+        </section>
 
         <!-- Orion Freight Express -->
-        <div class="airline-section">
-            <div class="airline-header">
-                 <span class="airline-header-icon"><i class="fas fa-satellite-dish"></i></span> <!-- Orion icon idea -->
-                <h2>Orion Freight Express - Australia/NZ Schedule (OF – 606)</h2>
+        <section class="airline-card" id="of606">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-broadcast-tower"></i></span>
+                <h2>Orion Freight Express (OF – 606)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>A330 Passenger Aircraft. From Singapore (SIN). Effective 01NOV24 - 31MAY26. All times local. "+1" indicates next day arrival. Interline services subject to partner availability.</p>
-            <h3><i class="fas fa-plane icon icon-list-route"></i>FLIGHT OPERATIONS - ORION FREIGHT EXPRESS</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-fighter-jet icon"></i><strong>SIN to Brisbane (BNE):</strong> OF701: Dep 21:00, Arr 06:30+1 (Daily)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>SIN to Adelaide (ADL):</strong> OF711: Dep 20:00, Arr 04:30+1 (Mon, Wed, Fri)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>SIN to Perth (PER):</strong> OF721: Dep 18:30, Arr 23:30 (Daily)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>SIN to Sydney (SYD):</strong> OF731: Dep 22:00, Arr 07:30+1 (Daily)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>SIN to Melbourne (MEL):</strong> OF741: Dep 22:30, Arr 08:00+1 (Daily)</li>
-                <li class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i><strong>SIN to Auckland (AKL) - Interline:</strong> OF751 (Connects via SYD/BNE): Dep SIN Varies, Arr AKL Varies (Daily options)</li>
-                <li class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i><strong>SIN to Christchurch (CHC) - Interline:</strong> OF761 (Connects via SYD/MEL): Dep SIN Varies, Arr CHC Varies (Daily options)</li>
-            </ul>
-        </div>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Australia/NZ. A330 Passenger Aircraft. Effective 01NOV24 - 31MAY26. Interline services subject to partner availability.</div>
+            <div class="airline-card-body">
+                <div class="list-schedule-group"><h3><i class="fas fa-plane icon icon-list-route"></i>FLIGHT OPERATIONS (from SIN):</h3>
+                <ul class="flight-list">
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF701 SIN-BNE:</strong> Dep 21:00 → Arr 06:30+1 (Daily)</span></div><div class="flight-aircraft">A330</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF711 SIN-ADL:</strong> Dep 20:00 → Arr 04:30+1 (Mon, Wed, Fri)</span></div><div class="flight-aircraft">A330</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF721 SIN-PER:</strong> Dep 18:30 → Arr 23:30 (Daily)</span></div><div class="flight-aircraft">A330</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF731 SIN-SYD:</strong> Dep 22:00 → Arr 07:30+1 (Daily)</span></div><div class="flight-aircraft">A330</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF741 SIN-MEL:</strong> Dep 22:30 → Arr 08:00+1 (Daily)</span></div><div class="flight-aircraft">A330</div></li>
+                    <li class="interline-tag"><i class="fas fa-handshake icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF751 SIN-AKL (Interline):</strong> Connects via SYD/BNE, Dep Varies (Daily options)</span></div><div class="flight-aircraft">A330/Partner</div></li>
+                    <li class="interline-tag"><i class="fas fa-handshake icon"></i><div class="flight-info"><span class="flight-route-time"><strong>OF761 SIN-CHC (Interline):</strong> Connects via SYD/MEL, Dep Varies (Daily options)</span></div><div class="flight-aircraft">A330/Partner</div></li>
+                </ul>
+                </div>
+                 <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>All times local. "+1" indicates next day arrival.</div>
+            </div>
+        </section>
 
         <!-- Phoenix Air Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-feather-alt"></i></span> <!-- Phoenix icon -->
-                <h2>Phoenix Air Cargo - North Asia Flight Schedule (PH – 709)</h2>
+        <section class="airline-card" id="ph709">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-feather-alt"></i></span>
+                <h2>Phoenix Air Cargo (PH – 709)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>A350/B777 Passenger Aircraft. From Singapore (SIN). Valid 01JAN24 - 31JUL26. All times are local. Standard DG acceptance (No Class 1, 7).</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Route</th><th>Flight No.</th><th>Dep Time</th><th>Arr Time</th><th>Aircraft</th><th>Days of Operation</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN-ICN</td><td>PH601</td><td>00:50</td><td>08:00</td><td>A350</td><td class="days-op">Daily</td></tr>
-                    <tr><td>SIN-PVG</td><td>PH611</td><td>01:20</td><td>06:30</td><td>B777</td><td class="days-op">Daily</td></tr>
-                    <tr><td>SIN-NRT</td><td>PH621</td><td>08:00</td><td>16:00</td><td>B777</td><td class="days-op">Daily</td></tr>
-                    <tr><td>SIN-PEK</td><td>PH631</td><td>09:00</td><td>15:00</td><td>A350</td><td class="days-op">Mon, Wed, Fri, Sun</td></tr>
-                    <tr><td>SIN-HKG</td><td>PH641</td><td>10:00</td><td>14:00</td><td>A350</td><td class="days-op">Daily</td></tr>
-                    <tr><td>SIN-TPE</td><td>PH651</td><td>14:00</td><td>18:30</td><td>B777</td><td class="days-op">Tue, Thu, Sat</td></tr>
-                    <tr><td>SIN-KIX</td><td>PH661</td><td>01:00</td><td>08:30</td><td>B777</td><td class="days-op">Daily</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>North Asia Network. A350/B777 Pax Aircraft. Valid 01JAN24 - 31JUL26. Standard DG (No Class 1, 7).</div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Route</th><th>Flight No.</th><th>Dep Time</th><th>Arr Time</th><th>Aircraft</th><th>Days of Operation</th></tr></thead>
+                    <tbody>
+                        <tr><td>SIN-ICN</td><td>PH601</td><td>00:50</td><td>08:00</td><td>A350</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>SIN-PVG</td><td>PH611</td><td>01:20</td><td>06:30</td><td>B777</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>SIN-NRT</td><td>PH621</td><td>08:00</td><td>16:00</td><td>B777</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>SIN-PEK</td><td>PH631</td><td>09:00</td><td>15:00</td><td>A350</td><td class="days-op-highlight">Mon, Wed, Fri, Sun</td></tr>
+                        <tr><td>SIN-HKG</td><td>PH641</td><td>10:00</td><td>14:00</td><td>A350</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>SIN-TPE</td><td>PH651</td><td>14:00</td><td>18:30</td><td>B777</td><td class="days-op-highlight">Tue, Thu, Sat</td></tr>
+                        <tr><td>SIN-KIX</td><td>PH661</td><td>01:00</td><td>08:30</td><td>B777</td><td class="days-op-highlight">Daily</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-info-circle icon"></i>All times local.</div>
             </div>
-        </div>
+        </section>
 
         <!-- Quantum Freight -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-atom"></i></span> <!-- Quantum icon -->
-                <h2>Quantum Freight - US West Coast Schedule (QF – 808)</h2>
+        <section class="airline-card" id="qf808">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-atom"></i></span>
+                <h2>Quantum Freight (QF – 808)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>B787 Passenger Service from Singapore (SIN). Effective 01FEB24 - 31AUG26. All times local. Arrival times are on the same calendar day due to time zone differences. Limited DG.</p>
-            <h3><i class="fas fa-plane-departure icon icon-list-route"></i>DEPARTURES FROM SINGAPORE (SIN):</h3>
-            <ul class="list-schedule">
-                <li><i class="fas fa-fighter-jet icon"></i><strong>To San Francisco (SFO):</strong> QF901: Dep 09:00, Arr 09:30 (Mon, Wed, Fri, Sun)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>To Los Angeles (LAX):</strong> QF905: Dep 10:00, Arr 10:30 (Tue, Thu, Sat)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>To Seattle (SEA):</strong> QF903: Dep 09:30, Arr 10:00 (Mon, Wed, Fri)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>To Portland (PDX):</strong> QF907: Dep 08:30, Arr 09:00 (Tue, Sat)</li>
-                <li><i class="fas fa-fighter-jet icon"></i><strong>To San Diego (SAN):</strong> QF909: Dep 10:30, Arr 11:00 (Thu, Sun)</li>
-                <li class="interline-note"><i class="fas fa-handshake icon icon-interline-indicator"></i><strong>To Vancouver (YVR) - Interline via SFO/LAX:</strong> QF911/Partner: Dep SIN Varies, Arr YVR Varies (Daily options)</li>
-            </ul>
-        </div>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>US West Coast. B787 Pax Service. Effective 01FEB24 - 31AUG26. Limited DG. Arr. same day (time zones).</div>
+            <div class="airline-card-body">
+                <div class="list-schedule-group"><h3><i class="fas fa-plane-departure icon icon-list-route"></i>DEPARTURES FROM SINGAPORE (SIN):</h3>
+                <ul class="flight-list">
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>QF901 To San Francisco (SFO):</strong> Dep 09:00 → Arr 09:30 (Mon,Wed,Fri,Sun)</span></div><div class="flight-aircraft">B787</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>QF905 To Los Angeles (LAX):</strong> Dep 10:00 → Arr 10:30 (Tue,Thu,Sat)</span></div><div class="flight-aircraft">B787</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>QF903 To Seattle (SEA):</strong> Dep 09:30 → Arr 10:00 (Mon,Wed,Fri)</span></div><div class="flight-aircraft">B787</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>QF907 To Portland (PDX):</strong> Dep 08:30 → Arr 09:00 (Tue,Sat)</span></div><div class="flight-aircraft">B787</div></li>
+                    <li><i class="fas fa-fighter-jet icon"></i><div class="flight-info"><span class="flight-route-time"><strong>QF909 To San Diego (SAN):</strong> Dep 10:30 → Arr 11:00 (Thu,Sun)</span></div><div class="flight-aircraft">B787</div></li>
+                    <li class="interline-tag"><i class="fas fa-handshake icon"></i><div class="flight-info"><span class="flight-route-time"><strong>QF911 To Vancouver (YVR) - Interline:</strong> Via SFO/LAX, Dep Varies (Daily options)</span></div><div class="flight-aircraft">B787/Partner</div></li>
+                </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Regional Air Express -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-map-signs"></i></span>
-                <h2>Regional Air Express - Feeder Network Schedule (RX – 909)</h2>
+        <section class="airline-card" id="rx909">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-map"></i></span>
+                <h2>Regional Air Express (RX – 909)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>ATR72/B737 Aircraft. From Singapore (SIN). Valid 01MAR24 - 30SEP26. <span class="freighter-note">NO DG ACCEPTED.</span> All times local. Schedule subject to local conditions.</p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Destination</th><th>Flight</th><th>Dep SIN</th><th>Arr Dest</th><th>Aircraft</th><th>Frequency</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Surabaya (SUB)</td><td>RX211</td><td>16:00</td><td>17:30</td><td>ATR72/B737</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Penang (PEN)</td><td>RX201</td><td>14:00</td><td>15:30</td><td>ATR72/B737</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Lombok (LOP)</td><td>RX221</td><td>11:00</td><td>13:30</td><td>ATR72</td><td class="days-op">4x weekly (M,W,F,Su)</td></tr>
-                    <tr><td>Langkawi (LGK)</td><td>RX231</td><td>10:00</td><td>11:30</td><td>ATR72</td><td class="days-op">3x weekly (Tu,Th,Sa)</td></tr>
-                    <tr><td>Medan (KNO)</td><td>RX241</td><td>09:00</td><td>09:30</td><td>B737</td><td class="days-op">Daily</td></tr>
-                    <tr><td>Kuching (KCH)</td><td>RX251</td><td>13:00</td><td>14:30</td><td>ATR72/B737</td><td class="days-op">5x weekly (Ex Tu,Th)</td></tr>
-                    <tr><td>Kota Kinabalu (BKI)</td><td>RX261</td><td>08:00</td><td>10:30</td><td>B737</td><td class="days-op">4x weekly (M,W,F,Su)</td></tr>
-                    <tr><td>Ipoh (IPH)</td><td>RX271</td><td>17:00</td><td>18:00</td><td>ATR72</td><td class="days-op">3x weekly (M,W,F)</td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes"><i class="fas fa-info-circle icon"></i>Feeder Network (Indonesia/Malaysia). ATR72/B737. Valid 01MAR24 - 30SEP26. <span class="freighter-note">NO DG ACCEPTED.</span></div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Destination</th><th>Flight</th><th>Dep SIN</th><th>Arr Dest</th><th>Aircraft</th><th>Frequency</th></tr></thead>
+                    <tbody>
+                        <tr><td>Surabaya (SUB)</td><td>RX211</td><td>16:00</td><td>17:30</td><td>ATR72/B737</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Penang (PEN)</td><td>RX201</td><td>14:00</td><td>15:30</td><td>ATR72/B737</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Lombok (LOP)</td><td>RX221</td><td>11:00</td><td>13:30</td><td>ATR72</td><td class="days-op-highlight">4x weekly (M,W,F,Su)</td></tr>
+                        <tr><td>Langkawi (LGK)</td><td>RX231</td><td>10:00</td><td>11:30</td><td>ATR72</td><td class="days-op-highlight">3x weekly (Tu,Th,Sa)</td></tr>
+                        <tr><td>Medan (KNO)</td><td>RX241</td><td>09:00</td><td>09:30</td><td>B737</td><td class="days-op-highlight">Daily</td></tr>
+                        <tr><td>Kuching (KCH)</td><td>RX251</td><td>13:00</td><td>14:30</td><td>ATR72/B737</td><td class="days-op-highlight">5x weekly (Ex Tu,Th)</td></tr>
+                        <tr><td>Kota Kinabalu (BKI)</td><td>RX261</td><td>08:00</td><td>10:30</td><td>B737</td><td class="days-op-highlight">4x weekly (M,W,F,Su)</td></tr>
+                        <tr><td>Ipoh (IPH)</td><td>RX271</td><td>17:00</td><td>18:00</td><td>ATR72</td><td class="days-op-highlight">3x weekly (M,W,F)</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-exclamation-triangle icon icon-warning"></i>All times local. Schedule subject to local conditions.</div>
             </div>
-        </div>
+        </section>
 
         <!-- Titan Cargo -->
-        <div class="airline-section">
-            <div class="airline-header">
-                <span class="airline-header-icon"><i class="fas fa-weight-hanging"></i></span> <!-- Titan/Heavy icon -->
-                <h2>Titan Cargo - Project & Heavy Lift Flight Availability (TC – 121)</h2>
+        <section class="airline-card" id="tc121">
+            <div class="airline-card-header">
+                <span class="airline-header-icon icon"><i class="fas fa-cogs"></i></span>
+                <h2>Titan Cargo (TC – 121)</h2>
             </div>
-            <p class="notes"><i class="fas fa-info-circle icon icon-info"></i>AN-124 / B747F. From Singapore (SIN). Effective 01APR24 - 31OCT26. Flights are non-scheduled and operate on demand / charter basis. <span class="freighter-note">DG subject to rigorous approval.</span></p>
-            <div class="table-responsive-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Route Examples</th><th>Aircraft Type(s)</th><th>Availability</th><th>Est. Transit Time (Direct)</th><th>Notes</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>SIN-DXB (Dubai)</td><td>AN-124 / B747F</td><td>On Demand</td><td>8-10 hrs</td><td><span class="freighter-note"><i class="fas fa-cogs icon icon-freighter-indicator"></i>Project Cargo / Heavy Lift</span></td></tr>
-                    <tr><td>SIN-FRA (Frankfurt)</td><td>AN-124 / B747F</td><td>On Demand</td><td>13-15 hrs</td><td><span class="freighter-note"><i class="fas fa-cogs icon icon-freighter-indicator"></i>Project Cargo / Heavy Lift</span></td></tr>
-                    <tr><td>SIN-IAH (Houston)</td><td>AN-124 / B747F</td><td>On Demand</td><td>20-24 hrs (with tech stop)</td><td><span class="freighter-note"><i class="fas fa-oil-can icon icon-freighter-indicator"></i>Project Cargo / Oil & Gas</span></td></tr>
-                    <tr><td>SIN-PER (Perth)</td><td>B747F</td><td>On Demand</td><td>5-6 hrs</td><td><span class="freighter-note"><i class="fas fa-boxes-stacked icon icon-freighter-indicator"></i>Heavy Lift</span></td></tr>
-                    <tr><td>SIN-JNB (Johannesburg)</td><td>AN-124 / B747F</td><td>On Demand</td><td>12-14 hrs</td><td><span class="freighter-note"><i class="fas fa-gem icon icon-freighter-indicator"></i>Project Cargo / Mining</span></td></tr>
-                    <tr><td>SIN-ANC (Anchorage)</td><td>AN-124 / B747F</td><td>On Demand</td><td>15-18 hrs</td><td><span class="freighter-note"><i class="fas fa-industry icon icon-freighter-indicator"></i>Project Cargo / Remote Ops</span></td></tr>
-                    <tr><td>SIN-POM (Port Moresby)</td><td>AN-124</td><td>On Demand</td><td>6-7 hrs</td><td><span class="freighter-note"><i class="fas fa-hard-hat icon icon-freighter-indicator"></i>Project Cargo / Mining Equipment</span></td></tr>
-                </tbody>
-            </table>
+            <div class="airline-card-sub-notes">
+                 <i class="fas fa-info-circle icon"></i>Project & Heavy Lift (AN-124 / B747F). Effective 01APR24 - 31OCT26. <span class="freighter-note">On Demand/Charter. DG approval required.</span>
             </div>
-            <p class="sub-notes"><i class="fas fa-phone-alt icon icon-info"></i>To request a charter or project cargo movement, please contact Titan Cargo Sales. Lead times vary.</p>
-        </div>
+            <div class="airline-card-body">
+                <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead><tr><th>Route Examples</th><th>Aircraft Type(s)</th><th>Availability</th><th>Est. Transit Time (Direct)</th><th>Primary Use</th></tr></thead>
+                    <tbody>
+                        <tr><td>SIN-DXB (Dubai)</td><td>AN-124 / B747F</td><td class="days-op-highlight">On Demand</td><td>8-10 hrs</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-tools icon"></i>Project/Heavy Lift</span></td></tr>
+                        <tr><td>SIN-FRA (Frankfurt)</td><td>AN-124 / B747F</td><td class="days-op-highlight">On Demand</td><td>13-15 hrs</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-tools icon"></i>Project/Heavy Lift</span></td></tr>
+                        <tr><td>SIN-IAH (Houston)</td><td>AN-124 / B747F</td><td class="days-op-highlight">On Demand</td><td>20-24 hrs (w/ tech stop)</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-oil-can icon"></i>Project/Oil & Gas</span></td></tr>
+                        <tr><td>SIN-PER (Perth)</td><td>B747F</td><td class="days-op-highlight">On Demand</td><td>5-6 hrs</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-boxes-stacked icon"></i>Heavy Lift</span></td></tr>
+                        <tr><td>SIN-JNB (Johannesburg)</td><td>AN-124 / B747F</td><td class="days-op-highlight">On Demand</td><td>12-14 hrs</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-gem icon"></i>Project/Mining</span></td></tr>
+                        <tr><td>SIN-ANC (Anchorage)</td><td>AN-124 / B747F</td><td class="days-op-highlight">On Demand</td><td>15-18 hrs</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-industry icon"></i>Project/Remote Ops</span></td></tr>
+                        <tr><td>SIN-POM (Port Moresby)</td><td>AN-124</td><td class="days-op-highlight">On Demand</td><td>6-7 hrs</td><td><span class="remarks-tag freighter-tag"><i class="fas fa-mountain icon"></i>Project/Mining Eq.</span></td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="schedule-footer-notes"><i class="fas fa-phone-alt icon"></i>To request a charter or project cargo movement, contact Titan Cargo Sales. Lead times vary.</div>
+            </div>
+        </section>
 
-    </div><!-- /.container -->
+    </div><!-- /.dashboard-container -->
 </body>
 </html>
